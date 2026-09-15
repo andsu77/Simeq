@@ -1,0 +1,25 @@
+{
+  "name": "simeq-node",
+  "version": "1.0.0",
+  "description": "Sistema Inteligente de Monitoramento e Manutenção de Equipamentos",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon --delay 2 src/server.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.2",
+    "express-session": "^1.19.0",
+    "mysql2": "^3.22.5"
+  },
+  "devDependencies": {
+    "cypress": "^16.1.0",
+    "jest": "^30.4.2",
+    "nodemon": "^2.0.22",
+    "supertest": "^7.2.2"
+  }
+}
