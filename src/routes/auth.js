@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const db = require('../config/db');
+const prisma = require('../config/prisma');
 
 // Rota de Login com Logs de Depuração (Otimizada para Apresentação)
 router.post('/login', async (req, res) => {
@@ -11,14 +11,12 @@ router.post('/login', async (req, res) => {
 
     try {
         // 1. Verificar conexão com o banco e buscar usuário
-        const [rows] = await db.execute('SELECT * FROM usuarios WHERE email = ?', [email]);
-        console.log(`[SIMEQ] Usuários encontrados: ${rows.length}`);
+        const user = await prisma.usuario.findUnique({ where: { email } });
+        console.log(`[SIMEQ] Usuário encontrado: ${user ? 'sim' : 'não'}`);
 
-        if (rows.length === 0) {
+        if (!user) {
             return res.status(401).json({ success: false, message: 'Usuário não cadastrado.' });
         }
-
-        const user = rows[0];
 
         // 2. Comparação Híbrida de Senha (Evita falhas de ambiente na apresentação)
         let passwordMatch = false;

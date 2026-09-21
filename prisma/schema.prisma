@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id           Int      @id @default(autoincrement())
+  nome         String
+  email        String   @unique
+  senha        String
+  cargo        String?
+  dataCadastro DateTime @default(now())
+
+  @@map("usuarios")
+}
+
+model Equipamento {
+  id                   Int          @id @default(autoincrement())
+  nome                 String
+  tipo                 String?
+  setor                String?
+  localizacao          String?
+  responsavel          String?
+  dataUltimaManutencao DateTime?
+  frequenciaDias       Int          @default(30)
+  criticidade          String       @default("Média")
+  observacoes          String?
+  manutencoes          Manutencao[]
+
+  @@map("equipamentos")
+}
+
+model Manutencao {
+  id              Int         @id @default(autoincrement())
+  equipamentoId   Int         @map("equipamento_id")
+  dataManutencao  DateTime    @map("data_manutencao")
+  responsavel     String?
+  descricao       String?
+  observacoes     String?
+  equipamento     Equipamento @relation(fields: [equipamentoId], references: [id], onDelete: Cascade)
+
+  @@map("manutencoes")
+}

@@ -1,43 +1,60 @@
 // src/models/equipamentoModel.js
-const db = require('../config/db');
+const prisma = require('../config/prisma');
 
 const EquipamentoModel = {
     // Listar todos ordenados por nome
     getAll: async () => {
-        const [rows] = await db.query('SELECT * FROM equipamentos ORDER BY nome ASC');
-        return rows;
+        return prisma.equipamento.findMany({ orderBy: { nome: 'asc' } });
     },
 
     // Buscar um equipamento por ID
     findById: async (id) => {
-        const [rows] = await db.execute('SELECT * FROM equipamentos WHERE id = ?', [id]);
-        return rows[0] || null;
+        return prisma.equipamento.findUnique({ where: { id: Number(id) } });
     },
 
     // Inserir novo equipamento no banco
     create: async (dados) => {
         const { nome, tipo, setor, localizacao, responsavel, dataUltimaManutencao, frequenciaDias, criticidade, observacoes } = dados;
-        const [result] = await db.execute(
-            'INSERT INTO equipamentos (nome, tipo, setor, localizacao, responsavel, dataUltimaManutencao, frequenciaDias, criticidade, observacoes) VALUES (?,?,?,?,?,?,?,?,?)',
-            [nome, tipo || null, setor || null, localizacao || null, responsavel || null, dataUltimaManutencao || null, frequenciaDias || 30, criticidade || 'Média', observacoes || null]
-        );
-        return result.insertId;
+        const equipamento = await prisma.equipamento.create({
+            data: {
+                nome,
+                tipo: tipo || null,
+                setor: setor || null,
+                localizacao: localizacao || null,
+                responsavel: responsavel || null,
+                dataUltimaManutencao: dataUltimaManutencao ? new Date(dataUltimaManutencao) : null,
+                frequenciaDias: frequenciaDias ? Number(frequenciaDias) : 30,
+                criticidade: criticidade || 'Média',
+                observacoes: observacoes || null
+            }
+        });
+        return equipamento.id;
     },
 
     // Atualizar/Editar um equipamento existente
     update: async (id, dados) => {
         const { nome, tipo, setor, localizacao, responsavel, dataUltimaManutencao, frequenciaDias, criticidade, observacoes } = dados;
-        const [result] = await db.execute(
-            'UPDATE equipamentos SET nome=?, tipo=?, setor=?, localizacao=?, responsavel=?, dataUltimaManutencao=?, frequenciaDias=?, criticidade=?, observacoes=? WHERE id=?',
-            [nome, tipo, setor, localizacao, responsavel, dataUltimaManutencao, frequenciaDias, criticidade, observacoes, id]
-        );
-        return result.affectedRows > 0;
+        const result = await prisma.equipamento.updateMany({
+            where: { id: Number(id) },
+            data: {
+                nome,
+                tipo,
+                setor,
+                localizacao,
+                responsavel,
+                dataUltimaManutencao: dataUltimaManutencao ? new Date(dataUltimaManutencao) : null,
+                frequenciaDias: frequenciaDias !== undefined ? Number(frequenciaDias) : undefined,
+                criticidade,
+                observacoes
+            }
+        });
+        return result.count > 0;
     },
 
     // Deletar equipamento por ID
     delete: async (id) => {
-        const [result] = await db.execute('DELETE FROM equipamentos WHERE id = ?', [id]);
-        return result.affectedRows > 0;
+        const result = await prisma.equipamento.deleteMany({ where: { id: Number(id) } });
+        return result.count > 0;
     }
 };
 

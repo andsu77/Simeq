@@ -6,20 +6,29 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon --delay 2 src/server.js",
+    "start:3000": "cross-env PORT=3000 node src/server.js",
+    "start:3001": "cross-env PORT=3001 node src/server.js",
+    "start:3002": "cross-env PORT=3002 node src/server.js",
+    "start:3003": "cross-env PORT=3003 node src/server.js",
     "test": "jest"
   },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.6.1",
     "express": "^4.22.2",
-    "express-session": "^1.19.0",
-    "mysql2": "^3.22.5"
+    "express-session": "^1.19.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "cypress": "^16.1.0",
     "jest": "^30.4.2",
     "nodemon": "^2.0.22",
+    "prisma": "^5.22.0",
     "supertest": "^7.2.2"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }

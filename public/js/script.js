@@ -6,6 +6,38 @@
 const app = document.getElementById('app');
 let currentUser = null;
 
+// Mapa de rotas: cada aba principal tem seu próprio endereço (mesma porta/servidor)
+const routes = {
+    '/login': renderLogin,
+    '/dashboard': renderDashboard,
+    '/equipamentos': renderEquipamentos,
+    '/manutencoes': renderManutencoes,
+    '/monitoramento': renderMonitoramento,
+    '/relatorios': renderRelatorios,
+    '/usuarios': renderUsuarios,
+    '/configuracoes': renderConfiguracoes
+};
+
+function setRoute(path) {
+    if (window.location.pathname !== path) {
+        history.pushState({}, '', path);
+    }
+}
+
+function renderRotaAtual() {
+    const renderFn = routes[window.location.pathname] || renderDashboard;
+    renderFn();
+}
+
+// Suporte aos botões voltar/avançar do navegador
+window.addEventListener('popstate', () => {
+    if (!currentUser) {
+        renderLogin();
+        return;
+    }
+    renderRotaAtual();
+});
+
 // Função de Inicialização
 async function init() {
     try {
@@ -13,7 +45,7 @@ async function init() {
         const data = await res.json();
         if (data.loggedIn) {
             currentUser = data.user;
-            renderDashboard();
+            renderRotaAtual();
         } else {
             renderLogin();
         }
@@ -66,6 +98,7 @@ function renderLayout(contentHTML, activeLink) {
 
 // 1. LOGIN
 function renderLogin() {
+    setRoute('/login');
     app.innerHTML = `
         <div class="login-container">
             <div class="login-box">
@@ -123,6 +156,7 @@ function renderLogin() {
 
 // 2. DASHBOARD
 async function renderDashboard() {
+    setRoute('/dashboard');
     try {
         const [resEquip, resManut] = await Promise.all([
             fetch('/api/equipamentos'),
@@ -206,6 +240,7 @@ async function renderDashboard() {
 
 // 3. EQUIPAMENTOS (CRUD COMPLETO)
 async function renderEquipamentos() {
+    setRoute('/equipamentos');
     const res = await fetch('/api/equipamentos');
     const equips = await res.json();
     
@@ -432,6 +467,7 @@ async function renderEditarEquipamento(id) {
 
 // 4. MANUTENÇÕES
 async function renderManutencoes() {
+    setRoute('/manutencoes');
     const [resEquip, resManut] = await Promise.all([
         fetch('/api/equipamentos'),
         fetch('/api/manutencoes')
@@ -510,6 +546,7 @@ async function renderManutencoes() {
 
 // 5. MONITORAMENTO
 async function renderMonitoramento() {
+    setRoute('/monitoramento');
     const res = await fetch('/api/equipamentos');
     const equips = await res.json();
     
@@ -550,6 +587,7 @@ async function renderMonitoramento() {
 
 // 6. RELATÓRIOS
 async function renderRelatorios() {
+    setRoute('/relatorios');
     const [resEquip, resManut] = await Promise.all([
         fetch('/api/equipamentos'),
         fetch('/api/manutencoes')
@@ -589,6 +627,7 @@ async function renderRelatorios() {
 
 // 7. USUÁRIOS (CRUD COMPLETO)
 async function renderUsuarios() {
+    setRoute('/usuarios');
     const res = await fetch('/api/usuarios');
     const users = await res.json();
     
@@ -789,6 +828,7 @@ async function deletarUsuario(id) {
 
 // 8. CONFIGURAÇÕES
 function renderConfiguracoes() {
+    setRoute('/configuracoes');
     const html = `
         <div class="page-header">
             <h2>Configurações</h2>

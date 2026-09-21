@@ -46,15 +46,15 @@ CREATE TABLE manutencoes (
 -- USUÁRIO PADRÃO CONFIGURADO EM TEXTO PURO PARA EVITAR CONFLITOS DE BCRYPT
 -- E-mail: admin@simeq.com | Senha: admin123
 -- =========================================================================
-INSERT INTO usuarios (nome, email, senha, cargo) VALUES 
+INSERT INTO usuarios (nome, email, senha, cargo) VALUES
 ('Administrador', 'admin@simeq.com', 'admin123', 'Gerente');
 
 -- Dados de Exemplo para Apresentação (Alinhados com o ano de 2026)
-INSERT INTO equipamentos (nome, tipo, sector, localizacao, responsavel, dataUltimaManutencao, frequenciaDias, criticidade) VALUES 
+INSERT INTO equipamentos (nome, tipo, setor, localizacao, responsavel, dataUltimaManutencao, frequenciaDias, criticidade) VALUES
 ('Torno CNC 01', 'Industrial', 'Produção', 'Galpão A', 'João Silva', '2026-06-15', 30, 'Alta'),
 ('Compressor de Ar', 'Apoio', 'Manutenção', 'Área Externa', 'Carlos Souza', '2026-05-20', 60, 'Média'),
 ('Empilhadeira Elétrica', 'Logística', 'Expedição', 'Almoxarifado', 'Ana Oliveira', '2026-06-25', 15, 'Baixa');
 
-INSERT INTO manutencoes (equipamento_id, data_manutencao, responsavel, descricao) VALUES 
+INSERT INTO manutencoes (equipamento_id, data_manutencao, responsavel, descricao) VALUES
 (1, '2026-06-15', 'Técnico Externo', 'Troca de óleo e limpeza de filtros.'),
 (2, '2026-05-20', 'Equipe Interna', 'Verificação de vazamentos e pressão.');

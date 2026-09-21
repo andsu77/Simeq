@@ -1,17 +1,26 @@
-jest.mock('../config/db', () => ({
-  execute: jest.fn()
+jest.mock('../config/prisma', () => ({
+  equipamento: { create: jest.fn() }
 }));
 
-const db = require('../config/db');
+const prisma = require('../config/prisma');
 const equipamentoModel = require('../models/equipamentoModel');
 
 test('deve cadastrar um equipamento usando os valores padrão', async () => {
-  db.execute.mockResolvedValue([{ insertId: 1 }]);
+  prisma.equipamento.create.mockResolvedValue({ id: 1 });
   const idGerado = await equipamentoModel.create({ nome: 'Empilhadeira elétrica' });
   expect(idGerado).toBe(1);
-  
-  expect(db.execute).toHaveBeenCalledWith(
-    expect.any(String),
-    ['Empilhadeira elétrica', null, null, null, null, null, 30, 'Média', null]
-  );
+
+  expect(prisma.equipamento.create).toHaveBeenCalledWith({
+    data: {
+      nome: 'Empilhadeira elétrica',
+      tipo: null,
+      setor: null,
+      localizacao: null,
+      responsavel: null,
+      dataUltimaManutencao: null,
+      frequenciaDias: 30,
+      criticidade: 'Média',
+      observacoes: null
+    }
+  });
 });

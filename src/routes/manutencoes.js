@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/db');
+const prisma = require('../config/prisma');
 
 const checkAuth = (req, res, next) => {
     if (!req.session.userId) return res.status(401).json({ message: 'Não autorizado.' });
@@ -10,12 +10,19 @@ const checkAuth = (req, res, next) => {
 // Listar histórico de manutenções
 router.get('/', checkAuth, async (req, res) => {
     try {
-        const [rows] = await db.query(`
-            SELECT m.*, e.nome as equipamento_nome 
-            FROM manutencoes m 
-            JOIN equipamentos e ON m.equipamento_id = e.id 
-            ORDER BY m.data_manutencao DESC
-        `);
+        const manutencoes = await prisma.manutencao.findMany({
+            include: { equipamento: { select: { nome: true } } },
+            orderBy: { dataManutencao: 'desc' }
+        });
+        const rows = manutencoes.map((m) => ({
+            id: m.id,
+            equipamento_id: m.equipamentoId,
+            data_manutencao: m.dataManutencao,
+            responsavel: m.responsavel,
+            descricao: m.descricao,
+            observacoes: m.observacoes,
+            equipamento_nome: m.equipamento.nome
+        }));
         res.json(rows);
     } catch (error) {
         console.error('Erro ao listar manutenções:', error);
@@ -26,36 +33,29 @@ router.get('/', checkAuth, async (req, res) => {
 // Registrar nova manutenção
 router.post('/', checkAuth, async (req, res) => {
     const { equipamento_id, data_manutencao, responsavel, descricao, observacoes } = req.body;
-    
+
     if (!equipamento_id || !data_manutencao) {
         return res.status(400).json({ message: 'Equipamento e data são obrigatórios.' });
     }
 
     try {
-        const connection = await db.getConnection();
-        await connection.beginTransaction();
+        await prisma.$transaction([
+            prisma.manutencao.create({
+                data: {
+                    equipamentoId: Number(equipamento_id),
+                    dataManutencao: new Date(data_manutencao),
+                    responsavel: responsavel || null,
+                    descricao: descricao || null,
+                    observacoes: observacoes || null
+                }
+            }),
+            prisma.equipamento.update({
+                where: { id: Number(equipamento_id) },
+                data: { dataUltimaManutencao: new Date(data_manutencao) }
+            })
+        ]);
 
-        try {
-            // 1. Insere o registro de manutenção
-            await connection.execute(
-                'INSERT INTO manutencoes (equipamento_id, data_manutencao, responsavel, descricao, observacoes) VALUES (?,?,?,?,?)',
-                [equipamento_id, data_manutencao, responsavel || null, descricao || null, observacoes || null]
-            );
-
-            // 2. Atualiza a data da última manutenção no equipamento
-            await connection.execute(
-                'UPDATE equipamentos SET dataUltimaManutencao = ? WHERE id = ?',
-                [data_manutencao, equipamento_id]
-            );
-
-            await connection.commit();
-            res.status(201).json({ success: true, message: 'Manutenção registrada com sucesso!' });
-        } catch (err) {
-            await connection.rollback();
-            throw err;
-        } finally {
-            connection.release();
-        }
+        res.status(201).json({ success: true, message: 'Manutenção registrada com sucesso!' });
     } catch (error) {
         console.error('Erro ao registrar manutenção:', error);
         res.status(500).json({ message: 'Erro interno ao salvar registro.' });
