@@ -4,6 +4,7 @@
   "description": "Sistema Inteligente de Monitoramento e Manutenção de Equipamentos",
   "main": "src/server.js",
   "scripts": {
+    "postinstall": "prisma migrate deploy && node prisma/seed.js",
     "start": "node src/server.js",
     "dev": "nodemon --delay 2 src/server.js",
     "start:3000": "cross-env PORT=3000 node src/server.js",
