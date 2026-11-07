@@ -1,35 +1,63 @@
 {
-  "name": "simeq-node",
-  "version": "1.0.0",
+  "name": "simeq-intelligence-platform",
+  "version": "1.1.0",
   "description": "Sistema Inteligente de Monitoramento e Manutenção de Equipamentos",
-  "main": "src/server.js",
+  "main": "dist/src/server.js",
+  "private": true,
   "scripts": {
-    "postinstall": "prisma migrate deploy && node prisma/seed.js",
-    "start": "node src/server.js",
-    "dev": "nodemon --delay 2 src/server.js",
-    "start:3000": "cross-env PORT=3000 node src/server.js",
-    "start:3001": "cross-env PORT=3001 node src/server.js",
-    "start:3002": "cross-env PORT=3002 node src/server.js",
-    "start:3003": "cross-env PORT=3003 node src/server.js",
-    "test": "jest"
+    "dev": "concurrently -k \"tsx watch src/server.ts\" \"npm run build:frontend -- --watch\"",
+    "dev:server": "tsx watch src/server.ts",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "tsc",
+    "build:frontend": "esbuild src/frontend/script.ts --bundle --minify --outfile=public/js/script.js --format=iife --target=es2020",
+    "start": "node dist/src/server.js",
+    "start:3000": "cross-env PORT=3000 node dist/src/server.js",
+    "start:3001": "cross-env PORT=3001 node dist/src/server.js",
+    "start:3002": "cross-env PORT=3002 node dist/src/server.js",
+    "start:3003": "cross-env PORT=3003 node dist/src/server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.js",
+    "format": "prettier --write .",
+    "test": "npm run build:backend && cross-env NODE_ENV=test jest --runInBand",
+    "test:vitest": "vitest run",
+    "test:e2e": "cypress run"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "bcryptjs": "^2.4.3",
+    "compression": "^1.7.5",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.6.1",
     "express": "^4.22.2",
-    "express-session": "^1.19.0"
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.19.0",
+    "helmet": "^8.1.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.52.0",
+    "@types/compression": "^1.7.5",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/express": "^5.0.1",
+    "@types/express-session": "^1.18.1",
+    "@types/node": "^22.15.0",
+    "concurrently": "^9.1.2",
     "cross-env": "^7.0.3",
     "cypress": "^16.1.0",
+    "esbuild": "^0.25.4",
+    "eslint": "^9.24.0",
     "jest": "^30.4.2",
     "nodemon": "^2.0.22",
+    "prettier": "^3.5.3",
     "prisma": "^5.22.0",
-    "supertest": "^7.2.2"
+    "supertest": "^7.2.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.72.1",
+    "vitest": "^3.1.1"
   },
   "prisma": {
-    "seed": "node prisma/seed.js"
+    "seed": "tsx prisma/seed.ts"
   }
 }

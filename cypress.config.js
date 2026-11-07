@@ -5,7 +5,8 @@ module.exports = defineConfig({
     baseUrl: 'http://localhost:3000',
     viewportWidth: 1280,
     viewportHeight: 720,
-    specPattern: 'cypress/e2e/**/*.cy.js'
+    supportFile: 'cypress/support/e2e.ts',
+    specPattern: 'cypress/e2e/**/*.cy.ts'
   }
 });
 
