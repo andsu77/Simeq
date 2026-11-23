@@ -25,12 +25,12 @@ O sistema resolve o problema da descentralização de informações em ambientes
 
 ## Principais Funcionalidades
 
-- ** Autenticação e Controle de Acesso:** Sistema seguro de login e gerenciamento de sessões de usuários (`express-session`), com preferências individuais e fluxo de *onboarding* (tutorial interativo para novos usuários).
-- ** Gestão de Equipamentos:** Cadastro completo, consulta, atualização e remoção (CRUD) de máquinas e ativos industriais.
-- ** Controle de Manutenções:** Registro, acompanhamento e histórico de manutenções preventivas e corretivas vinculadas aos equipamentos.
-- ** Monitoramento IoT & Análise de Vibração:** Integração com hardware (Arduino + sensor acelerômetro ADXL345) para leitura contínua de eixos de vibração e detecção de anomalias diretamente na interface web.
-- ** Arquitetura Modular:** Suporte a módulos operacionais expansíveis dentro da plataforma para adaptação a diferentes fluxos de trabalho.
-- ** Qualidade de Software Garantida:** Cobertura de testes automatizados unitários/integração (Jest) e testes de ponta a ponta / E2E (Cypress).
+- **Autenticação e Controle de Acesso:** Sistema seguro de login e gerenciamento de sessões de usuários (`express-session`), com preferências individuais e fluxo de *onboarding* (tutorial interativo para novos usuários).
+- **Gestão de Equipamentos:** Cadastro completo, consulta, atualização e remoção (CRUD) de máquinas e ativos industriais.
+- **Controle de Manutenções:** Registro, acompanhamento e histórico de manutenções preventivas e corretivas vinculadas aos equipamentos.
+- **Monitoramento IoT & Análise de Vibração:** Integração com hardware (Arduino + sensor acelerômetro ADXL345) para leitura contínua de eixos de vibração e detecção de anomalias diretamente na interface web.
+- **Arquitetura Modular:** Suporte a módulos operacionais expansíveis dentro da plataforma para adaptação a diferentes fluxos de trabalho.
+- **Qualidade de Software Garantida:** Cobertura de testes automatizados unitários/integração (Jest) e testes de ponta a ponta / E2E (Cypress).
 
 ---
 
