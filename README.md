@@ -15,7 +15,7 @@
 
 ---
 
-## 📋 Sobre o Projeto
+## Sobre o Projeto
 
 O **SIMEQ** é uma plataforma web full-stack desenvolvida para modernizar e centralizar a gestão de ativos industriais, o controle de ordens de manutenção e o monitoramento preditivo de equipamentos em tempo real por meio de IoT (Internet das Coisas).
 
@@ -23,7 +23,7 @@ O sistema resolve o problema da descentralização de informações em ambientes
 
 ---
 
-## ✨ Principais Funcionalidades
+## Principais Funcionalidades
 
 - **🔐 Autenticação e Controle de Acesso:** Sistema seguro de login e gerenciamento de sessões de usuários (`express-session`), com preferências individuais e fluxo de *onboarding* (tutorial interativo para novos usuários).
 - **🏭 Gestão de Equipamentos:** Cadastro completo, consulta, atualização e remoção (CRUD) de máquinas e ativos industriais.
@@ -34,7 +34,7 @@ O sistema resolve o problema da descentralização de informações em ambientes
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 ### **Back-end & Banco de Dados**
 - **Node.js & Express:** Servidor web e construção da API RESTful.
@@ -56,7 +56,7 @@ O sistema resolve o problema da descentralização de informações em ambientes
 
 ---
 
-## 🏗️ Arquitetura e Estrutura de Diretórios
+## Arquitetura e Estrutura de Diretórios
 
 O projeto segue o padrão arquitetural **MVC (Model-View-Controller)** combinado com camadas de roteamento e middlewares:
 
@@ -92,7 +92,7 @@ Simeq-main/
 
 ---
 
-## 🚀 Como Executar o Projeto Localmente
+## Como Executar o Projeto Localmente
 
 ### **Pré-requisitos**
 - [Node.js](https://nodejs.org/) (versão 18 ou superior recomendada)
@@ -143,7 +143,7 @@ Simeq-main/
 
 ---
 
-## 🔌 Configuração do Módulo IoT (Arduino + ADXL345)
+## Configuração do Módulo IoT (Arduino + ADXL345)
 
 Para habilitar o monitoramento de vibração em tempo real:
 1. Conecte o sensor acelerômetro **ADXL345** ao **Arduino** via barramento I2C (`SDA`, `SCL`, `VCC` 3.3V/5V e `GND`).
@@ -153,7 +153,7 @@ Para habilitar o monitoramento de vibração em tempo real:
 
 ---
 
-## 🧪 Executando os Testes Automatizados
+## Executando os Testes Automatizados
 
 O SIMEQ conta com duas frentes de validação automatizada para garantir a estabilidade do sistema:
 
@@ -169,7 +169,7 @@ O SIMEQ conta com duas frentes de validação automatizada para garantir a estab
 
 ---
 
-## 🔌 Principais Endpoints da API
+## Principais Endpoints da API
 
 | Recurso | Rota Base | Descrição |
 | :--- | :--- | :--- |
@@ -181,7 +181,7 @@ O SIMEQ conta com duas frentes de validação automatizada para garantir a estab
 
 ---
 
-## 👥 Autores e Orientação
+## Autores e Orientação
 
 - **Desenvolvedor(es):** [Seu Nome Completo / Nomes da Equipe]
 - **Orientador(a):** Prof. [Nome do seu Professor Orientador]
