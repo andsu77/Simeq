@@ -183,10 +183,10 @@ O SIMEQ conta com duas frentes de validação automatizada para garantir a estab
 
 ## Autores e Orientação
 
-- **Desenvolvedor(es):** [Seu Nome Completo / Nomes da Equipe]
-- **Orientador(a):** Prof. [Nome do seu Professor Orientador]
-- **Instituição:** [Nome da sua Escola / Faculdade / Universidade]
-- **Curso:** [Nome do seu Curso — ex: Técnico em Desenvolvimento de Sistemas / Engenharia / Ciência da Computação]
+- **Desenvolvedor(es):** Cristiano Ronaldo, Jefferson Jesus, José Anderson e Kauê Felipe
+- **Orientador(a):** Prof. Leonardo Naiã
+- **Instituição:** SENAI
+- **Curso:** Técnico em Desenvolvimento de Sistemas
 
 ---
 
