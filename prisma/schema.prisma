@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Usuario {
+  id           Int      @id @default(autoincrement())
+  nome         String
+  email        String   @unique
+  senha        String
+  cargo        String?
+  dataCadastro DateTime @default(now())
+  tutorialStatus       String   @default("PENDING")
+  tutorialStartedAt    DateTime?
+  tutorialCompletedAt  DateTime?
+  preferencesJson      String   @default("{}")
+  iotEnabled           Boolean  @default(false)
+
+  @@map("usuarios")
+}
+
+model Equipamento {
+  id                   Int                   @id @default(autoincrement())
+  nome                 String
+  tipo                 String?
+  setor                String?
+  localizacao          String?
+  responsavel          String?
+  dataUltimaManutencao DateTime?
+  frequenciaDias       Int                   @default(30)
+  criticidade          String                @default("Média")
+  observacoes          String?
+  manutencoes          Manutencao[]
+  setorId              Int?
+  categoriaId          Int?
+  setorRef             Setor?                @relation(fields: [setorId], references: [id], onDelete: SetNull)
+  categoriaRef         CategoriaEquipamento? @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
+  planos               PlanoManutencao[]
+  ordens               OrdemServico[]
+  falhas               Falha[]
+  alertas              Alerta[]
+
+  @@map("equipamentos")
+}
+
+model Manutencao {
+  id             Int         @id @default(autoincrement())
+  equipamentoId  Int         @map("equipamento_id")
+  dataManutencao DateTime    @map("data_manutencao")
+  responsavel    String?
+  descricao      String?
+  observacoes    String?
+  equipamento    Equipamento @relation(fields: [equipamentoId], references: [id], onDelete: Cascade)
+
+  @@map("manutencoes")
+}
+
+model Setor {
+  id           Int           @id @default(autoincrement())
+  nome         String        @unique
+  descricao    String?
+  localizacao  String?
+  ativo        Boolean       @default(true)
+  criadoEm     DateTime      @default(now())
+  atualizadoEm DateTime      @updatedAt
+  equipamentos Equipamento[]
+
+  @@map("setores")
+}
+
+model CategoriaEquipamento {
+  id           Int           @id @default(autoincrement())
+  nome         String        @unique
+  descricao    String?
+  ativo        Boolean       @default(true)
+  criadoEm     DateTime      @default(now())
+  equipamentos Equipamento[]
+
+  @@map("categorias_equipamento")
+}
+
+model PlanoManutencao {
+  id            Int            @id @default(autoincrement())
+  equipamentoId Int
+  tipo          String         @default("PREVENTIVA")
+  periodicidade Int            @default(30)
+  unidade       String         @default("DIAS")
+  proximaData   DateTime
+  antecedencia  Int            @default(7)
+  instrucoes    String?
+  responsavel   String?
+  ativo         Boolean        @default(true)
+  criadoEm      DateTime       @default(now())
+  atualizadoEm  DateTime       @updatedAt
+  equipamento   Equipamento    @relation(fields: [equipamentoId], references: [id], onDelete: Cascade)
+  ordens        OrdemServico[]
+
+  @@index([equipamentoId, proximaData])
+  @@map("planos_manutencao")
+}
+
+model OrdemServico {
+  id            Int              @id @default(autoincrement())
+  equipamentoId Int
+  planoId       Int?
+  numero        String           @unique
+  titulo        String
+  descricao     String
+  tipo          String           @default("CORRETIVA")
+  prioridade    String           @default("MEDIA")
+  status        String           @default("ABERTA")
+  responsavel   String?
+  prazo         DateTime?
+  concluidaEm   DateTime?
+  observacoes   String?
+  custoEstimado Float?
+  custoReal     Float?
+  criadoEm      DateTime         @default(now())
+  atualizadoEm  DateTime         @updatedAt
+  equipamento   Equipamento      @relation(fields: [equipamentoId], references: [id], onDelete: Restrict)
+  plano         PlanoManutencao? @relation(fields: [planoId], references: [id], onDelete: SetNull)
+  falhas        Falha[]
+  alertas       Alerta[]
+
+  @@index([status, prioridade, prazo])
+  @@map("ordens_servico")
+}
+
+model Falha {
+  id              Int           @id @default(autoincrement())
+  equipamentoId   Int
+  ordemId         Int?
+  dataOcorrencia  DateTime      @default(now())
+  categoria       String?
+  descricao       String
+  impacto         String?
+  causa           String?
+  causaConfirmada Boolean       @default(false)
+  acaoCorretiva   String?
+  tempoParadaMin  Int?
+  criadoEm        DateTime      @default(now())
+  equipamento     Equipamento   @relation(fields: [equipamentoId], references: [id], onDelete: Restrict)
+  ordem           OrdemServico? @relation(fields: [ordemId], references: [id], onDelete: SetNull)
+
+  @@index([equipamentoId, dataOcorrencia])
+  @@map("falhas")
+}
+
+model Alerta {
+  id            Int           @id @default(autoincrement())
+  equipamentoId Int?
+  ordemId       Int?
+  tipo          String
+  severidade    String        @default("ATENCAO")
+  titulo        String
+  mensagem      String
+  chaveDedup    String        @unique
+  reconhecidoEm DateTime?
+  resolvidoEm   DateTime?
+  criadoEm      DateTime      @default(now())
+  equipamento   Equipamento?  @relation(fields: [equipamentoId], references: [id], onDelete: SetNull)
+  ordem         OrdemServico? @relation(fields: [ordemId], references: [id], onDelete: SetNull)
+
+  @@index([severidade, resolvidoEm, criadoEm])
+  @@map("alertas")
+}
+
+model Auditoria {
+  id         Int      @id @default(autoincrement())
+  usuarioId  Int?
+  acao       String
+  entidade   String
+  entidadeId Int?
+  detalhes   String?
+  criadoEm   DateTime @default(now())
+
+  @@index([entidade, entidadeId, criadoEm])
+  @@map("auditoria")
+}

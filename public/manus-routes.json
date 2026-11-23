@@ -1,0 +1,18 @@
+{
+  "routes": [
+    { "path": "/login", "title": "Login — SIMEQ" },
+    { "path": "/dashboard", "title": "Dashboard — SIMEQ" },
+    { "path": "/equipamentos", "title": "Equipamentos — SIMEQ" },
+    { "path": "/manutencoes", "title": "Manutenções — SIMEQ" },
+    { "path": "/monitoramento", "title": "Monitoramento — SIMEQ" },
+    { "path": "/setores", "title": "Setores e categorias — SIMEQ" },
+    { "path": "/planos", "title": "Planos de manutenção — SIMEQ" },
+    { "path": "/ordens", "title": "Ordens de serviço — SIMEQ" },
+    { "path": "/falhas", "title": "Falhas — SIMEQ" },
+    { "path": "/alertas", "title": "Alertas — SIMEQ" },
+    { "path": "/relatorios", "title": "Relatórios — SIMEQ" },
+    { "path": "/usuarios", "title": "Usuários — SIMEQ" },
+    { "path": "/auditoria", "title": "Auditoria — SIMEQ" },
+    { "path": "/configuracoes", "title": "Configurações — SIMEQ" }
+  ]
+}
